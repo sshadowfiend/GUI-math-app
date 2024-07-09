@@ -38,24 +38,28 @@ def main_func(n: int) -> tuple:
     return t, uvx, uvix
 
 
-def calculate_impulse_len(n: int, u: list[float]) -> float:
-    dt = 40 / (n - 1)
+def calculate_impulse_len(n: int, u_: list[float]) -> float:
+    dt = (tk - tn) / (n - 1)
     dl = 0
-    umax = max(u)
-    umin = min(u)
+    umax = max(u_)
+    umin = min(u_)
     a = umax - umin  # амплитуда сигнала
     uimp = umin + a / 2
     for i in range(n):
-        if u[i] >= uimp:
+        if u_[i] >= uimp:
             dl += dt
 
     return float("%.2f" % dl)
 
 
+t_ref, uvx_ref, uvix_ref = main_func(1000)
+ref_par_uvx = calculate_impulse_len(1000, uvx_ref)
+ref_par_uvix = calculate_impulse_len(1000, uvix_ref)
+
+
 def par_error_rate(n: int) -> tuple:
-    t_ref, uvx_ref, uvix_ref = main_func(1000)
     t, uvx, uvix = main_func(n)
     return (
-        abs(calculate_impulse_len(n, uvx) - calculate_impulse_len(1000, uvx_ref)),
-        abs(calculate_impulse_len(n, uvix) - calculate_impulse_len(1000, uvix_ref))
+        abs(calculate_impulse_len(n, uvx) - ref_par_uvx),
+        abs(calculate_impulse_len(n, uvix) - ref_par_uvix)
     )

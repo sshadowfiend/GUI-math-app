@@ -11,6 +11,15 @@ matplotlib.use("agg")
 
 def main(page: ft.Page) -> None:
 
+    def error_handler(field: ft.TextField, error_text: str) -> None:
+        field.value = error_text
+        field.read_only = True
+        page.update()
+        time.sleep(2)
+        field.value = ""
+        field.read_only = False
+        page.update()
+
     def main_calculate(e) -> None:
         try:
             n = int(input_points.value)
@@ -51,22 +60,10 @@ def main(page: ft.Page) -> None:
                         )
                     )
             else:
-                input_points.value = "Число должно быть > 1!"
-                input_points.read_only = True
-                page.update()
-                time.sleep(2)
-                input_points.value = ""
-                input_points.read_only = False
-                page.update()
+                error_handler(input_points, "Необходимо минимум 2 точки!")
 
         except ValueError:
-            input_points.value = "Ошибка!"
-            input_points.read_only = True
-            page.update()
-            time.sleep(2)
-            input_points.value = ""
-            input_points.read_only = False
-            page.update()
+            error_handler(input_points, "Некорректный ввод!")
 
         output_field.content = db
         page.update()
@@ -112,44 +109,31 @@ def main(page: ft.Page) -> None:
                     else:
                         n *= 2
             else:
-                input_error_rate.value = "Погрешность > 0.001!"
-                input_error_rate.read_only = True
-                page.update()
-                time.sleep(2)
-                input_error_rate.value = ""
-                input_error_rate.read_only = False
-                page.update()
+                error_handler(input_error_rate, "Минимальная погрешность 0.001!")
 
         except ValueError:
-            input_error_rate.value = "Ошибка!"
-            input_error_rate.read_only = True
-            page.update()
-            time.sleep(2)
-            input_error_rate.value = ""
-            input_error_rate.read_only = False
-            page.update()
+            error_handler(input_error_rate, "Некорректный ввод!")
 
     def par(e) -> None:
 
         try:
             n = int(input_points.value)
-            t, uvx, uvix = main_func(n)
-            par_uvx = calculate_impulse_len(n, uvx)
-            par_uvix = calculate_impulse_len(n, uvix)
-            output_par.content = ft.Text(
-                f'Длительность импульса сигнала\nдля Uvx: {par_uvx}, для Uvix: {par_uvix}',
-                size=15,
-                color=ft.colors.BLACK,
-                text_align=ft.TextAlign.CENTER
-            )
-            page.update()
+            if n > 1:
+                t, uvx, uvix = main_func(n)
+                par_uvx = calculate_impulse_len(n, uvx)
+                par_uvix = calculate_impulse_len(n, uvix)
+                output_par.content = ft.Text(
+                    f'Длительность импульса сигнала\nдля Uvx: {par_uvx}, для Uvix: {par_uvix}',
+                    size=15,
+                    color=ft.colors.BLACK,
+                    text_align=ft.TextAlign.CENTER
+                )
+                page.update()
+            else:
+                error_handler(input_points, "Необходимо минимум 2 точки!")
 
         except ValueError:
-            input_points.value = "Ошибка!"
-            page.update()
-            time.sleep(2)
-            input_points.value = ""
-            page.update()
+            error_handler(input_points, "Некорректный ввод!")
 
     def close_banner(e) -> None:
         page.banner.open = False
