@@ -1,11 +1,11 @@
-import flet as ft
 import os
 import glob
 import time
 import matplotlib
-from main_funcs import main_func, par_error_rate, calculate_impulse_len
+import flet as ft
 from plot import plot
 from note import note_txt
+from math_funcs import main_func, par_error_rate, calculate_impulse_len
 matplotlib.use("agg")
 
 
@@ -80,8 +80,8 @@ def main(page: ft.Page) -> None:
                             ft.Text("N", size=12, color=ft.colors.BLACK, width=40),
                             ft.Text("Пар. Uvx", size=12, color=ft.colors.BLACK, width=60),
                             ft.Text("Пар. Uvix", size=12, color=ft.colors.BLACK, width=60),
-                            ft.Text("α_Uvx", size=12, color=ft.colors.BLACK, width=40),
-                            ft.Text("α_Uvix", size=12, color=ft.colors.BLACK, width=40)
+                            ft.Text("α_Uvx", size=12, color=ft.colors.BLACK, width=50),
+                            ft.Text("α_Uvix", size=12, color=ft.colors.BLACK, width=50)
                         ]
                     )
                 )
@@ -97,8 +97,8 @@ def main(page: ft.Page) -> None:
                                 ft.Text(f"{n}", size=12, color=ft.colors.BLACK, width=40),
                                 ft.Text(f"{calculate_impulse_len(n, uvx)}", size=12, color=ft.colors.BLACK, width=60),
                                 ft.Text(f"{calculate_impulse_len(n, uvix)}", size=12, color=ft.colors.BLACK, width=60),
-                                ft.Text(f"{'%.3f' % a_uvx}", size=12, color=ft.colors.BLACK, width=40),
-                                ft.Text(f"{'%.3f' % a_uvix}", size=12, color=ft.colors.BLACK, width=40)
+                                ft.Text(f"{'%.3f' % a_uvx}", size=12, color=ft.colors.BLACK, width=50),
+                                ft.Text(f"{'%.3f' % a_uvix}", size=12, color=ft.colors.BLACK, width=50)
                             ]
                         )
                     )
@@ -146,10 +146,12 @@ def main(page: ft.Page) -> None:
     page.title = "Cursach"
     page.window_width = 740
     page.window_height = 600
-    page.bgcolor = ft.colors.BLUE_200
     page.window_resizable = False
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    page.bgcolor = ft.colors.BLUE_200
     page.horizontal_alignment = "CENTER"
+    page.fonts = {"Nunito": "Nunito.ttf"}
+    page.theme = ft.Theme(font_family="Nunito")
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.update()
 
     db = ft.Column(
@@ -174,7 +176,7 @@ def main(page: ft.Page) -> None:
         border_color='#F5DEB3',
         border_radius=10,
         width=350,
-        height=65
+        height=63
     )
 
     input_error_rate = ft.TextField(
@@ -185,7 +187,7 @@ def main(page: ft.Page) -> None:
         border_color='#F5DEB3',
         border_radius=10,
         width=350,
-        height=65
+        height=63
     )
 
     btn_info = ft.ElevatedButton(
@@ -196,10 +198,8 @@ def main(page: ft.Page) -> None:
         width=170
     )
 
-    par_txt = ft.Text("Рассчитать параметр", size=12)
-
     btn_par = ft.ElevatedButton(
-        content=par_txt,
+        content=ft.Text("Рассчитать параметр", size=11),
         on_click=par,
         bgcolor='#EDF5E1',
         color='BLack',
@@ -214,7 +214,7 @@ def main(page: ft.Page) -> None:
                         ),
         color='#EDF5E1',
         width=350,
-        height=60
+        height=65
     )
 
     page.banner = ft.Banner(
